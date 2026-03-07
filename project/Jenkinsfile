@@ -7,15 +7,30 @@ pipeline {
         PORT = "4000"
         CONTAINER_PORT = "80"
         DOCKER_REGISTRY = "docker.io"           // Docker Hub
-        DOCKER_REPO = "vasundhara12"            // Your Docker Hub username
+        DOCKER_REPO = "vasundhara12"            // Docker Hub username
         IMAGE_TAG = "latest"
     }
 
     stages {
 
+        stage('Debug Workspace') {
+            steps {
+                echo "Checking workspace and Dockerfile..."
+                sh "pwd"
+                sh "ls -l"
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
+                // Ensure Dockerfile exists in the workspace root
+                sh '''
+                    if [ ! -f Dockerfile ]; then
+                        echo "Error: Dockerfile not found!"
+                        exit 1
+                    fi
+                '''
                 sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
                 sh "docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPO/$IMAGE_NAME:$IMAGE_TAG"
             }
