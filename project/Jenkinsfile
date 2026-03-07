@@ -6,6 +6,9 @@ pipeline {
         CONTAINER_NAME = "vasundhara-nginx-container"
         PORT = "4000"
         CONTAINER_PORT = "80"
+        DOCKER_REGISTRY = "docker.io"           // Docker Hub
+        DOCKER_REPO = "vasundhara12"            // Your Docker Hub username
+        IMAGE_TAG = "latest"
     }
 
     stages {
@@ -13,7 +16,21 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
-                sh "docker build -t $IMAGE_NAME ."
+                sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
+                sh "docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$DOCKER_REPO/$IMAGE_NAME:$IMAGE_TAG"
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                echo "Logging in to Docker Hub..."
+                withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDS', 
+                                                  usernameVariable: 'DOCKER_USER', 
+                                                  passwordVariable: 'DOCKER_PASS')]) {
+                    sh "echo $DOCKER_PASS | docker login $DOCKER_REGISTRY -u $DOCKER_USER --password-stdin"
+                    sh "docker push $DOCKER_REGISTRY/$DOCKER_REPO/$IMAGE_NAME:$IMAGE_TAG"
+                    sh "docker logout $DOCKER_REGISTRY"
+                }
             }
         }
 
@@ -24,7 +41,7 @@ pipeline {
                 sh "docker rm $CONTAINER_NAME || true"
 
                 echo "Running new container on port $PORT..."
-                sh "docker run -d -p $PORT:$CONTAINER_PORT --name $CONTAINER_NAME $IMAGE_NAME"
+                sh "docker run -d -p $PORT:$CONTAINER_PORT --name $CONTAINER_NAME $DOCKER_REGISTRY/$DOCKER_REPO/$IMAGE_NAME:$IMAGE_TAG"
             }
         }
     }
