@@ -20,7 +20,25 @@
             </plugin>
         </plugins>
     </build>
+<properties>
+    <sonar.projectKey>vasundhara-app</sonar.projectKey>
+    <sonar.host.url>http://13.232.255.202:9000</sonar.host.url>
+</properties>
 
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>4.0.0.4121</version>
+        </plugin>
+
+        <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version>
+        </plugin>
+    </plugins>
+</build>
     <!-- Nexus Distribution Management -->
     <distributionManagement>
         <repository>
