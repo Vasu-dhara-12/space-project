@@ -66,4 +66,19 @@
         </plugins>
     </build>
 
+    <!-- ✅ Distribution Management -->
+    <distributionManagement>
+        <repository>
+            <id>maven-release</id>
+            <name>admin</name>
+            <url>http://13.232.255.202:8081/repository/maven-releases/
+        </repository>
+
+        <snapshotRepository>
+            <id>maven-snapshort</id>
+            <name>admin</name>
+            <url>http://13.232.255.202:8081/repository/maven-snapshots/
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
