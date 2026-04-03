@@ -71,13 +71,13 @@
         <repository>
             <id>maven-release</id>
             <name>admin</name>
-            <url>http://13.232.255.202:8081/repository/maven-releases/
+            <url>http://13.232.255.202:8081/repository/maven-releases/</url>
         </repository>
 
         <snapshotRepository>
-            <id>maven-snapshort</id>
+            <id>maven-snapshot</id>
             <name>admin</name>
-            <url>http://13.232.255.202:8081/repository/maven-snapshots/
+            <url>http://13.232.255.202:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
