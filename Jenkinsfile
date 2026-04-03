@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'maven3'  // Use the exact name configured in Jenkins
+    }
+
     environment {
         // Docker / Deployment Variables
         IMAGE_NAME = "vasundhara-nginx-app"
@@ -11,13 +15,9 @@ pipeline {
         DOCKER_REPO = "vasudhara12"
         IMAGE_TAG = "latest"
 
-        // Maven
-        MAVEN_HOME = '/usr/share/maven' // default path
+        // Maven (optional, already handled by tools)
+        MAVEN_HOME = '/usr/share/maven'
         PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
-    }
-
-    tools {
-        maven 'Maven3' // Jenkins configured Maven
     }
 
     stages {
@@ -27,22 +27,6 @@ pipeline {
                 sh "pwd"
                 sh "ls -l"
                 sh "ls -l project"
-            }
-        }
-
-        stage('Check & Install Maven') {
-            steps {
-                sh '''
-                if ! command -v mvn &> /dev/null
-                then
-                    echo "Maven not found. Installing..."
-                    sudo apt update
-                    sudo apt install -y maven
-                else
-                    echo "Maven is already installed."
-                fi
-                mvn -version
-                '''
             }
         }
 
@@ -57,7 +41,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('project') {
-                    withSonarQubeEnv('sq') { // 'sq' is your Jenkins SonarQube server name
+                    withSonarQubeEnv('sq') { // 'sq' = your Jenkins SonarQube server name
                         sh """
                         mvn sonar:sonar \
                             -Dsonar.projectKey=vasundhara-app \
