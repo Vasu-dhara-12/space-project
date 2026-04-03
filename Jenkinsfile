@@ -53,8 +53,9 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('project') {
-                    withSonarQubeEnv('sq') {   // Jenkins Sonar config name
-                        sh '''
+                   withSonarQubeEnv('sq') {
+    sh "mvn sonar:sonar"
+}
                         mvn sonar:sonar \
                         -Dsonar.projectKey=vasundhara-app \
                         -Dsonar.host.url=http://<SONAR-IP>:9000 \
