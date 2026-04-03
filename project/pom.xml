@@ -24,7 +24,7 @@
     </properties>
 
     <dependencies>
-        <!-- Spring Web -->
+        <!-- Spring Boot Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -37,7 +37,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Test -->
+        <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -47,13 +47,16 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot plugin -->
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.vasundhara.nginxapp.Application</mainClass>
+                </configuration>
             </plugin>
 
-            <!-- Compiler plugin -->
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -66,7 +69,7 @@
         </plugins>
     </build>
 
-    <!-- Distribution Management -->
+    <!-- Nexus Distribution Management -->
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
