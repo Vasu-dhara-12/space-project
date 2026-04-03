@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Docker / Deployment Variables
         IMAGE_NAME = "vasundhara-nginx-app"
         CONTAINER_NAME = "vasundhara-nginx-container"
         PORT = "5000"
@@ -9,6 +10,10 @@ pipeline {
         DOCKER_REGISTRY = "docker.io"
         DOCKER_REPO = "vasudhara12"
         IMAGE_TAG = "latest"
+
+        // Maven
+        MAVEN_HOME = '/usr/share/maven' // default path
+        PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
     }
 
     stages {
@@ -21,7 +26,22 @@ pipeline {
             }
         }
 
-        // ✅ NEW: Maven Build
+        stage('Check & Install Maven') {
+            steps {
+                sh '''
+                if ! command -v mvn &> /dev/null
+                then
+                    echo "Maven not found. Installing..."
+                    sudo apt update
+                    sudo apt install -y maven
+                else
+                    echo "Maven is already installed."
+                fi
+                mvn -version
+                '''
+            }
+        }
+
         stage('Build with Maven') {
             steps {
                 dir('project') {
@@ -30,7 +50,6 @@ pipeline {
             }
         }
 
-        // ✅ NEW: SonarQube Analysis
         stage('SonarQube Analysis') {
             steps {
                 dir('project') {
@@ -46,7 +65,6 @@ pipeline {
             }
         }
 
-        // ✅ NEW: Nexus Deploy
         stage('Upload to Nexus') {
             steps {
                 dir('project') {
@@ -106,6 +124,7 @@ pipeline {
                 sh "docker run -d -p $PORT:$CONTAINER_PORT --name $CONTAINER_NAME $DOCKER_REGISTRY/$DOCKER_REPO/$IMAGE_NAME:$IMAGE_TAG"
             }
         }
+
     }
 
     post {
