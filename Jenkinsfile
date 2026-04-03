@@ -53,7 +53,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('project') {
-                    withSonarQubeEnv('sonar-scanner') {   // Jenkins Sonar config name
+                    withSonarQubeEnv('sq') {   // Jenkins Sonar config name
                         sh '''
                         mvn sonar:sonar \
                         -Dsonar.projectKey=vasundhara-app \
