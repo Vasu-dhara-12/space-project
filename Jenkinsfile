@@ -38,21 +38,20 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('project') {
-                    withSonarQubeEnv('sq') { // 'sq' = your Jenkins SonarQube server name
-                        sh """
-                        mvn sonar:sonar \
-                            -Dsonar.projectKey=vasundhara-app \
-                            -Dsonar.host.url=${env.SONAR_HOST_URL} \
-                            -Dsonar.login=${env.SONAR_AUTH_TOKEN}
-                        """
-                    }
-                }
+       stage('SonarQube Analysis') {
+    steps {
+        dir('project') {
+            withSonarQubeEnv('sq') {
+                sh """
+                mvn sonar:sonar \
+                    -Dsonar.projectKey=vasundhara-app \
+                    -Dsonar.host.url=http://13.232.255.202:9000 \
+                    -Dsonar.login=${env.SONAR_AUTH_TOKEN}
+                """
             }
         }
-
+    }
+}
         stage('Upload to Nexus') {
             steps {
                 dir('project') {
