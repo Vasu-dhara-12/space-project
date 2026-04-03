@@ -1,6 +1,13 @@
 pipeline {
     agent any
-
+  stage('Use Maven') {
+    tools {
+        maven 'Maven3'  // Replace 'Maven3' with the exact name of your Maven installation in Jenkins
+    }
+    steps {
+        sh 'mvn -version'
+    }
+}
     environment {
         // Docker / Deployment Variables
         IMAGE_NAME = "vasundhara-nginx-app"
